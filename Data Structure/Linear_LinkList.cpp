@@ -28,6 +28,29 @@ public:
 };
 
 template <class T>
+Node<T>* LinkList<T>::Get(int i) {
+	Node<T> *p = front->next;
+	int j = 1;
+	while (p && j != i) {
+		p = p->next;
+		j++;
+	}
+	return p;
+}
+
+template <class T>
+int LinkList<T>::Locate(T x) {
+	Node<T> *p = front->next;
+	int j = 1;
+	while (p)
+	{
+		if (p->data == x) return j;
+		p = p->next;
+		j++;
+	}
+}
+
+template <class T>
 LinkList<T>::LinkList(T a[], int n, int mode) {
 //0 头插法，~0尾插法
 	if (0 == mode) {
@@ -76,9 +99,45 @@ void LinkList<T>::PrintList() {
 	}
 }
 
+template<class T>
+void LinkList<T>::Insert(int i, T x) {
+	Node<T> *p = front;
+	if (i != 1)p = Get(i - 1);
+	if(p){
+		Node<T> *s = new Node<T>;
+		s->data = x;
+		s->next = p->next;
+		p -> next = s;
+	}
+	else
+	{
+		throw "插入位置错误";
+	}
+}
+
+template<class T>
+T LinkList<T>::Delete(int i) {
+	Node<T> *p = front;
+	if (i!=1)
+	{
+		p = Get(i - 1);
+	}
+	if (!p && !p->next)throw "位置错误";
+	Node<T> *q = p->next;
+	p->next = q->next;
+	T x = q->data;
+	delete q;
+	return x;
+}
 int main() {
 	int a[10] = { 3,2,1,4,5,6,9,8,7,0 };
 	LinkList<int> ll(a, 10,1);
+	ll.PrintList();
+	cout << endl;
+	ll.Insert(11, int(10));
+	ll.PrintList();
+	cout << endl;
+	cout<<ll.Delete(10)<<endl;
 	ll.PrintList();
 	system("pause");
 	return 0;

@@ -19,6 +19,7 @@ public:
 	void Insert(int i, T x);
 	T Delete(int i);
 	void PrintList();
+	void Connect(CLinkList<T> &tmp);
 private:
 	Node<T> * rear;
 };
@@ -121,25 +122,45 @@ T CLinkList<T>::Delete(int i) {
 	delete s;
 	return tmp;
 }
+template<class T>
+void CLinkList<T>::Connect(CLinkList<T> &tmp){
+	if (tmp.rear->next==tmp.rear) {
+		return;
+	}
+	// cout<<rear->data;
+	Node<T>*p=rear->next;
+	rear->data=tmp.rear->next->data;
+	rear->next=tmp.rear->next->next;
+	tmp.rear->next=p;
+	rear=tmp.rear;
+	tmp.rear=tmp.rear->next;
+}
 int main()
 {
 	int a[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-	CLinkList<int> cll_empty();
-	CLinkList<int> cll(a, 10);
-	cll.PrintList();
-	cout << endl << "链表长度为:" << cll.GetLength() << endl;
-	cout << cll.GetLength() << endl;
-	cout << cll.Get(int(10)) << endl;
-	cout << cll.Locate(int(22));
-	try {
-	cll.Insert(10, int(100));
-	}
-	catch(...){
-		cout << "发生异常";
-	}
-	cll.PrintList();
-	cout << "删除的结果为：" << cll.Delete(int(10)) << endl;
-	cll.PrintList();
+	// CLinkList<int> cll_empty();
+	// CLinkList<int> cll(a, 10);
+	// cll.PrintList();
+	// cout << endl << "链表长度为:" << cll.GetLength() << endl;
+	// cout << cll.GetLength() << endl;
+	// cout << cll.Get(int(10)) << endl;
+	// cout << cll.Locate(int(22));
+	// try {
+	// cll.Insert(10, int(100));
+	// }
+	// catch(...){
+	// 	cout << "发生异常";
+	// }
+	// cll.PrintList();
+	// cout << "删除的结果为：" << cll.Delete(int(10)) << endl;
+	// cll.PrintList();
+	int b[10]={0,9,8,7,6,5,4,3,2,1};
+	CLinkList<int> cll1(a,10);
+	CLinkList<int> cll2(b,10);
+	cll1.PrintList();
+	cll2.PrintList();
+	cll1.Connect(cll2);
+	cll1.PrintList();
 	system("pause");
 	return 0;
 }

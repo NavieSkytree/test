@@ -16,7 +16,7 @@ public:
   int Get(int i);
   int Locate(T x);
   int NewNode();
-  void DeleteNode(int i);
+  T DeleteNode(int i);
   void PrintList();
 private:
   int front;
@@ -79,19 +79,40 @@ void SLinkList<T>::Insert(int i,T a){
   if (i<1 || i>MAXSIZE) throw "invalid position";
   int p=Get(i);
   // cout<<p<<"!!!";
-  if(SArray[p].next!=-1){
+  // cout<<SArray[p].next;
+  if(SArray[p].next == -1){
     int pos=NewNode();
     SArray[pos].data=SArray[p].data;
     SArray[p].data=a;
+    SArray[p].next=pos;
+    SArray[pos].next=-1;
   }
   else{
     int pos=NewNode();
     SArray[pos].data=SArray[p].data;
     SArray[p].data=a;
-    SArray[pos].next=-1;
+    SArray[pos].next=SArray[p].next;
+    SArray[p].next=pos;
   }
 }
-
+template<class T>
+T SLinkList<T>::DeleteNode(int i) {
+  if (i<1 || i>MAXSIZE)throw "invalid position";
+  int p=Get(i-1);
+  int q=SArray[p].next;
+  T tmp=SArray[q].data;
+  if (SArray[q].next==-1) {
+    SArray[p].next=-1;
+    SArray[q].next=tail;
+    tail=q;
+  }
+  else{
+    SArray[p].next=SArray[q].next;
+    SArray[q].next=tail;
+    tail=q;
+  }
+  return tmp;
+}
 template<class T>
 int SLinkList<T>::Get(int i){
   if (i<1 || i>MAXSIZE) throw"invalid position";
@@ -107,7 +128,10 @@ int main(int argc, char const *argv[]) {
   SLinkList<int> slist(a,10);
   slist.PrintList();
   std::cout << '\n';
-  slist.Insert(2,100);
+  slist.Insert(10,100);
+  slist.PrintList();
+  cout<<endl;
+  cout<<slist.DeleteNode(2);
   slist.PrintList();
   system("pause");
   return 0;

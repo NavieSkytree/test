@@ -25,7 +25,7 @@ def train(trainLoader,net,optimizer,criterion,p_inter):
                 print('Epoch:',str(epoch),' ','Iter:',str(i),' ','Loss:',running_loss/2000)
     print('Finished')
 def test(testLoader,net):
-    pass
+
 def demo():
 
 if __name__ == '__main__':

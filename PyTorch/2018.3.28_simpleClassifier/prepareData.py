@@ -1,21 +1,21 @@
 import os
-
-dataPath=''
-savePath=''
+import random
+dataPath='DATA'
+savePath='DATA'
 
 ratio=0.2
-folders=os.listdir(dataPath)
 trainset=[]
 testset=[]
 
-for fd in folders:
+# print(os.listdir('./DATA'))
+for fd in os.listdir(dataPath):
     full_path=os.path.join(dataPath,fd)
     for i in os.listdir(full_path):
         tmp=os.path.join(full_path,i)
-        tmp=tmp+fd
+        tmp=tmp+' '+fd
         trainset.append(tmp)
 
-trainset.shuffle()
+random.shuffle(trainset)
 testnum=round(len(trainset)*ratio)
 
 testset=trainset[0:testnum]

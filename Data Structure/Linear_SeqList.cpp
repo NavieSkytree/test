@@ -62,7 +62,7 @@ T SeqList<T>::Delete(int i) {
 
 template<class T>
 T SeqList<T>::Get(int i) {
-	if (i < length || i>length)throw "位置异常";
+	if (i < 1 || i>length)throw "位置异常";
 	return data[i - 1];
 }
 

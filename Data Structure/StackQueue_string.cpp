@@ -21,7 +21,17 @@ public:
 	T Delete(int i);
 
 };
-
+template<class T>
+int LinkList<T>::GetLength(){
+	int tmp = 0;
+	Node<T>*p = front->next;
+	while (p)
+	{
+		p = p->next;
+		tmp++;
+	}
+	return tmp;
+}
 template <class T>
 Node<T>* LinkList<T>::Get(int i) {
 	Node<T> *p = front->next;
@@ -30,7 +40,7 @@ Node<T>* LinkList<T>::Get(int i) {
 		p = p->next;
 		j++;
 	}
-	return p->data;
+	return p;
 }
 
 template <class T>
@@ -125,19 +135,34 @@ T LinkList<T>::Delete(int i) {
 	delete q;
 	return x;
 }
-class LinkString :public LinkList<char>{
+class LinkString :public LinkList<char> {
 public:
-	LinkString() :LinkList<char>(){};
+	LinkString() :LinkList<char>() {};
 	LinkString(char tmp[], int n) : LinkList(tmp, n, 1) {};
 	void Strcat(LinkString &s);
-	LinkString Substr(int i, int j);
+	LinkString* Substr(int i, int j);
 	int Strcmp(LinkString &s);
-	void Inset(int i,LinkString &);
-	void Delte(int i, int j);
+	void Insert(int i, LinkString &);
 	int Index(LinkString &s);
 	bool Replace(LinkString &t, LinkString &v);
 
 };
+bool LinkString::Replace(LinkString &t, LinkString &v){
+	int i = 1,j=1,tmp=0;
+	Node<char>*p = front->next;
+	while(p) {
+		if(Get(i)->data == t.Get(j)->data)
+		p = p->next;
+	}
+}
+void LinkString::Insert(int i, LinkString &s) {
+	Node<char>*p = Get(i - 1);
+	Node<char>*rear = s.front->next;
+	while (rear->next)rear = rear->next;
+	rear->next = p->next;
+	p->next = s.front->next;
+	s.front->next = NULL;
+}
 void LinkString::Strcat(LinkString &s) {
 	Node<char>*p = this->front;
 	while (p->next)p = p->next;
@@ -145,9 +170,36 @@ void LinkString::Strcat(LinkString &s) {
 	p->next = tmp->next;
 	tmp->next = NULL;
 }
-LinkString LinkString::Substr(int i,int j){
-	Node<char>*p = Get(i);
+LinkString* LinkString::Substr(int i, int j) {
+	Node<char>*tmp = Get(i-1);
+	Node<char>*p = tmp->next;
+	for(int t=0;t<j-1;++t){
+		if (!p->next) {
+			break;
+		}
+		p = p->next;
+	}
+	LinkString *tmpls=new LinkString();
+	tmpls->front->next = tmp->next;
 
+	tmp->next = p->next;
+	PrintList();
+	p->next = NULL;
+	//tmpls.PrintList();
+	return tmpls;
+
+}
+int LinkString::Strcmp(LinkString &s) {
+	int i = 1, j = 1;
+	while (i <= GetLength() && j < s.GetLength()) {
+		if (Get(i)->data > s.Get(j)->data) return 1;
+		else if (Get(i)->data < s.Get(j)->data) return -1;
+		i++;
+		j++;
+	}
+	if (GetLength() == s.GetLength())return 0;
+	else if (GetLength() > s.GetLength())return 1;
+	else return -1;
 }
 int main(int argc, char const *argv[]) {
 	//int a[5] = { 1,2,3,4,54 };
@@ -155,11 +207,14 @@ int main(int argc, char const *argv[]) {
 	//ll.PrintList();
 	//cout << ll.Get(5);
 	char *a = "abcde";
-	char *b = "xyz";
+	char *b = "abcdex";
 	LinkString aa = LinkString(a, 5);
-	LinkString bb = LinkString(b, 3);
-	aa.PrintList();
+	LinkString bb = LinkString(b, 6);
+	/*aa.PrintList();
 	aa.Strcat(bb);
+	LinkString* ret= aa.Substr(3, 2);
+	ret->PrintList();*/
+	aa.Insert(2,bb);
 	aa.PrintList();
 	system("pause");
 	return 0;

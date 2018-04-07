@@ -108,6 +108,7 @@ int main(int argc, char const *argv[]) {
   stack.Pop();
   stack.PrintStack();
   cout<<stack.GetTop();
+  cin.get();
   system("pause");
   return 0;
 }

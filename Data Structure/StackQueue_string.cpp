@@ -214,6 +214,7 @@ int main(int argc, char const *argv[]) {
 	aa.Strcat(bb);
 	LinkString* ret= aa.Substr(3, 2);
 	ret->PrintList();*/
+	
 	aa.Insert(2,bb);
 	aa.PrintList();
 	system("pause");

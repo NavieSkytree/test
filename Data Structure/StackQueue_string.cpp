@@ -22,7 +22,7 @@ public:
 
 };
 template<class T>
-int LinkList<T>::GetLength(){
+int LinkList<T>::GetLength() {
 	int tmp = 0;
 	Node<T>*p = front->next;
 	while (p)
@@ -143,17 +143,49 @@ public:
 	LinkString* Substr(int i, int j);
 	int Strcmp(LinkString &s);
 	void Insert(int i, LinkString &);
-	int Index(LinkString &s);
+	int Index_BF(LinkString &s);
+	int Index_KMP(LinkString &s);
 	bool Replace(LinkString &t, LinkString &v);
+	void GenNextArray(LinkString &t, int *next);
 
 };
-bool LinkString::Replace(LinkString &t, LinkString &v){
-	int i = 1,j=1,tmp=0;
-	Node<char>*p = front->next;
-	while(p) {
-		if(Get(i)->data == t.Get(j)->data)
-		p = p->next;
+int LinkString::Index_KMP(LinkString &s) {
+	int i = 1, j = 1;
+	int *next = new int[s.GetLength() + 1];
+	GenNextArray(s, next);
+	while (i<GetLength() && j<s.GetLength())
+	{
+		if (Get(i) == s.Get(j)) { i++;j++;}
+		else if (!next[j]) { i++;j = 1; }
+		else j = next[j];
 	}
+	if (j > s.GetLength())return i+1-j;
+	else return -1;
+}
+void LinkString::GenNextArray(LinkString &t, int *next) {
+	next[1] = 0;
+	next[2] = 1;
+	int p = next[2];
+	//p storage next[j-1]
+	for(int j=3;j<t.GetLength();++j){
+		while (p>1 && t.Get(p)!=t.Get(j-1))
+		{
+			p = next[p];
+		}
+		if (t.Get(p) == t.Get(j - 1))
+			p++;
+		next[j] = p;
+	}
+}
+
+bool LinkString::Replace(LinkString &t, LinkString &v) {
+	int out = Index_BF(t);
+	if (out != -1) {
+		Substr(out, t.GetLength());
+		Insert(out, v);
+		return true;
+	}
+	else return false;
 }
 void LinkString::Insert(int i, LinkString &s) {
 	Node<char>*p = Get(i - 1);
@@ -170,16 +202,28 @@ void LinkString::Strcat(LinkString &s) {
 	p->next = tmp->next;
 	tmp->next = NULL;
 }
+int LinkString::Index_BF(LinkString &s) {
+	//i-k=j-1 describe relation of target string and pattern string
+	int i = 1, j = 1;
+	while (i<=GetLength() && j<=s.GetLength())
+	{
+		if (Get(i)->data == s.Get(j)->data) { i++;j++; }
+		else { i = i - j + 2;j = 1; }
+
+	}
+	if (j > s.GetLength()) { return i + 1 - j; }
+	else return -1;
+}
 LinkString* LinkString::Substr(int i, int j) {
-	Node<char>*tmp = Get(i-1);
+	Node<char>*tmp = Get(i - 1);
 	Node<char>*p = tmp->next;
-	for(int t=0;t<j-1;++t){
+	for (int t = 0;t<j - 1;++t) {
 		if (!p->next) {
 			break;
 		}
 		p = p->next;
 	}
-	LinkString *tmpls=new LinkString();
+	LinkString *tmpls = new LinkString();
 	tmpls->front->next = tmp->next;
 
 	tmp->next = p->next;
@@ -206,17 +250,23 @@ int main(int argc, char const *argv[]) {
 	//LinkList<int> ll = LinkList<int>(a, 5,1);
 	//ll.PrintList();
 	//cout << ll.Get(5);
-	char *a = "abcde";
-	char *b = "abcdex";
-	LinkString aa = LinkString(a, 5);
-	LinkString bb = LinkString(b, 6);
+	char *a = "cabcdeacfabcdxd";
+	char *b = "abc";
+	char *c = "123";
+	LinkString aa = LinkString(a, 15);
+	LinkString bb = LinkString(b, 3);
+	LinkString cc = LinkString(c, 3);
 	/*aa.PrintList();
 	aa.Strcat(bb);
 	LinkString* ret= aa.Substr(3, 2);
 	ret->PrintList();*/
-	
-	aa.Insert(2,bb);
+
+	/*aa.Insert(2, bb);
+	aa.PrintList();*/
 	aa.PrintList();
+	aa.Replace(bb, cc);
+	aa.PrintList();
+	cout << aa.Index_KMP(bb);
 	system("pause");
 	return 0;
 }

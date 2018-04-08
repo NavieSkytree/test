@@ -133,7 +133,7 @@ int main(int argc, char const *argv[]) {
   cout<<endl;
   cout<<slist.DeleteNode(2);
   slist.PrintList();
-  
+
   system("pause");
   return 0;
 }

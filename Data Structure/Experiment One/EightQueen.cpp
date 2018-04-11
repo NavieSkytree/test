@@ -29,6 +29,13 @@ bool check(int chess[8][8], int row, int col) {
 	}
 	return true;
 }
+void clear(int chess[][8]){
+	for(int i=0;i<8;++i){
+		for(int j=0;j<8;++j){
+			chess[i][j]=0;
+		}
+	}
+}
 void print(int chess[8][8]) {
 	for (int i = 0; i < 8; i++)
 	{
@@ -43,25 +50,24 @@ void EQueen(int chess[8][8], int row) {
 	if (8 == row) {
 		static int total = 0;
 		total++;
+		cout<<"-------------------"<<endl;
 		cout << total << endl;
 		print(chess);
 	}
 	else {
 		for (int i=0;i <8; i++) {
-			for(int j = 0;j < 8;j++) chess[row][j] = 0;//回溯时清空标记非常重要
 			if (check(chess, row, i)) {
 				chess[row][i] = 1;
-				print(chess);
+				// print(chess);
 				EQueen(chess, row + 1);
+				chess[row][i]=0;
+				//回溯时清空标记非常重要
 			}
 		}
 	}
 }
 int main(int argc, char const *argv[]) {
 	int chessboard[8][8] = { 0 };
-	print(chessboard);
 	EQueen(chessboard, 0);
-
-	system("pause");
 	return 0;
 }

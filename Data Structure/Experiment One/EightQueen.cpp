@@ -43,6 +43,7 @@ void EQueen(int chess[8][8], int row) {
 	if (8 == row) {
 		static int total = 0;
 		total++;
+		cout<<"-------------------"<<endl;
 		cout << total << endl;
 		print(chess);
 	}
@@ -51,7 +52,7 @@ void EQueen(int chess[8][8], int row) {
 			for(int j = 0;j < 8;j++) chess[row][j] = 0;//回溯时清空标记非常重要
 			if (check(chess, row, i)) {
 				chess[row][i] = 1;
-				print(chess);
+				// print(chess);
 				EQueen(chess, row + 1);
 			}
 		}

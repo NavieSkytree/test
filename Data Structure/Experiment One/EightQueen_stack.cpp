@@ -1,5 +1,7 @@
 #include<iostream>
 #include<stack>
+#include<vector>
+#include<queue>
 using namespace std;
 struct rcInfo{
   rcInfo(int i,int j):row(i),col(j){};
@@ -7,11 +9,10 @@ struct rcInfo{
   int col;
 };
 stack<rcInfo> chessStack;
-//TODO c++的大坑啊
-bool check(int chess[8][8],rcInfo& tmp) {
+bool check(int chess[8][8],int row,int col) {
 	//check vertical and horiontal
-  int row=tmp.row;
-  int col=tmp.col;
+  // int row=tmp.row;
+  // int col=tmp.col;
 	for (int i = 0;i < 8;++i) {
 		if (chess[row][i] == 1)
 			return false;
@@ -50,13 +51,38 @@ void print(int chess[8][8]) {
 	}
 	cout << endl;
 }
-void EQueen(int chess[8][8], int row) {
+void EQueen(int chess[8][8]) {
+  int tmp;
   for(int i=0;i<8;i++){
-    
+    tmp=i;
+    while (1) {
+      for(int j=0;j<8;++j){
+        if(check(chess,tmp,j)){
+          chess[tmp][j]=1;
+          chessStack.emplace(tmp,j);
+          tmp++;
+          print(chess);
+          break;
+        }
+        if(7==j){
+          rcInfo &data=chessStack.top();
+          chessStack.pop();
+          chess[data.row][data.col]=0;
+          tmp=data.row;
+          j=data.col;
+          continue;
+        }
+      }
+
+      if(8==tmp){
+        print(chess);
+      }
+    }
   }
 }
 int main(int argc, char const *argv[]) {
-	int chessboard[8][8] = { 0 };
-	EQueen(chessboard, 0);
+	// int chessboard[8][8] = { 0 };
+	// EQueen(chessboard);
+
 	return 0;
 }

@@ -52,9 +52,9 @@ void print(int chess[8][8]) {
 	cout << endl;
 }
 void EQueen(int chess[8][8]) {
-  int tmp;
-  for(int i=0;i<8;i++){
-    tmp=i;
+  int tmp=0;
+  // for(int i=0;i<8;i++){
+  //   tmp=i;
     while (1) {
       for(int j=0;j<8;++j){
         if(check(chess,tmp,j)){
@@ -78,11 +78,11 @@ void EQueen(int chess[8][8]) {
         print(chess);
       }
     }
-  }
+  // }
 }
 int main(int argc, char const *argv[]) {
-	// int chessboard[8][8] = { 0 };
-	// EQueen(chessboard);
+	int chessboard[8][8] = { 0 };
+	EQueen(chessboard);
 
 	return 0;
 }
